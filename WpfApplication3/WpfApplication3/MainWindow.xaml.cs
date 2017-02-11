@@ -30,10 +30,12 @@ namespace WpfApplication3
 
             int[,] tablero = new int[3, 3];
             int[,] candidato = new int[3, 3];
-            //int[,,] visitados = new int[50, 3, 3];
+            int[,,] visitados = new int[60, 3, 3];
+            int indvis = 0;
             int H = 0,haux=0;//marca errores
             int index = -1;
             string cad = "";
+            bool rep = false;
 
             //inicializar valores de tablero inicial 
             tablero[0, 0] = int.Parse(I00.Text);
@@ -58,86 +60,148 @@ namespace WpfApplication3
             }
 
             completo[2, 2] = 0;
-            ///////////////////////////////////////////////
+            
+           
+
+            
+
+            
+
+            
+
+           
+
+
+
+
+
+
+
+
+
+
+
             index = -1;
 
             bool mverror = false;
-            for(int t=0;t<2;t++)
-            {
 
-                for (int k = 0; k < 2; k++)
-                {//buscar en x
-                    haux = 0;
+            while (H < 9)
+                for (int t = 0; t < 2; t++)
+                {
+                    MessageBox.Show("nuevo");
+                    H = 0;
+                    for (int k = 0; k < 2; k++)
+                    {//buscar en x
+                        haux = 0;
+
+                        try
+                        {
+                            mover_x(tablero, index);//mueve en eje x
+                            rep = Busca_en_vistados(tablero,visitados,indvis);//busca que no este repetido
+                            MessageBox.Show(rep.ToString());
+                            if (rep == false)
+                            {
+                                Copia_vist(visitados,tablero, indvis);//guarda a visitados
+                                indvis++;
+                                haux = Compara_competo(tablero);//busca cuantos aciertos tiene el nuevo movimiento
+                                if (haux >= H)//si es mayor al aterior entra
+                                {
+                                    Copia_matriz(candidato, tablero);//copia el nuevo movimiento a candidato 
+                                    H = haux;// guarda en H para seguir comparando
+                                }
+
+                            }
+
+                           
+
+                            index = index * -1;
+                        }
+                        catch (Exception ex)
+                        {
+                            mverror = true;
+                        }
 
 
-                    
-                    try
-                    {
-                        mover_x(tablero, index);
+
+
+
+                        if (mverror == false)
+                            mover_x(tablero, index);
+
+                        mverror = false;
+
                     }
-                    catch (Exception ex)
-                    {
-                        mverror = true;
+                    for (int k = 0; k < 2; k++)
+                    {//buscar en y
+                        haux = 0;
+
+                        try
+                        {
+                            mover_y(tablero, index);
+                            rep = Busca_en_vistados(tablero, visitados, indvis);
+                            MessageBox.Show(rep.ToString());
+                            if (rep == false)
+                            {
+                                Copia_vist(visitados, tablero, indvis);//guarda a visitados
+                                haux = Compara_competo(tablero);
+
+                                if (haux > H)
+                                {
+                                    Copia_matriz(candidato, tablero);
+                                    H = haux;
+                                }
+                            }
+                            
+
+                            
+                        }
+                        catch (Exception)
+                        {
+                            mverror = true;
+                        }
+
+
+
+                        index = index * -1;
+
+                        if (mverror == false)
+                            mover_y(tablero, index);
+
+                        mverror = false;
+
+
+
                     }
 
-                    haux = Compara_competo(tablero);
 
-                    if (haux > H)
+
+
+
+
+                    Copia_matriz(tablero, candidato);
+
+
+
+                    cad = "";
+                    for (int m = 0; m < 3; m++)
                     {
-                        Copia_matriz(candidato, tablero);
-                        H = haux;
+
+                        for (int j = 0; j < 3; j++)
+                        {
+                            cad += tablero[m, j].ToString();
+                            cad += ",";
+
+                        }
+                        cad += Environment.NewLine;
+
                     }
-                    
-                    index = index * -1;
 
-                    if (mverror == false)
-                        mover_x(tablero, index);
 
-                    mverror = false;
+                    prueba.Text = cad;
+
+
 
                 }
-                for (int k = 0; k < 2; k++)
-                {//buscar en y
-                    haux = 0;
-
-                    try
-                    {
-                        mover_y(tablero, index);
-                    }
-                    catch (Exception)
-                    {
-                        mverror = true;
-                    }
-
-                    
-                    haux = Compara_competo(tablero);
-
-                    if (haux > H)
-                    {
-                        Copia_matriz(candidato, tablero);
-                        H = haux;
-                    }
-
-                    index = index * -1;
-
-                    if (mverror == false)
-                        mover_y(tablero, index);
-
-                    mverror = false;
-                    
-
-
-                }
-
-
-
-
-
-
-                Copia_matriz(tablero, candidato);
-
-
-            }
 
 
 
@@ -149,7 +213,7 @@ namespace WpfApplication3
 
                 for (int j = 0; j < 3; j++)
                 {
-                    cad +=tablero[m, j].ToString();
+                    cad += tablero[m, j].ToString();
                     cad += ",";
 
                 }
@@ -181,7 +245,7 @@ namespace WpfApplication3
 
 
 
-
+       
 
         public void mover_x(int[,] tablero,int index)
         {
@@ -266,7 +330,70 @@ namespace WpfApplication3
             }
         }
 
-        
+
+        public void Copia_vist(int[,,] visitados, int[,] tablero,int index) 
+        {
+
+            for (int l = 0; l < index; l++)
+            {
+
+                for (int k = 0; k < 3; k++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+
+                        visitados[l,k, j] = tablero[k, j];
+
+
+
+                    }
+                }
+
+            }
+            
+        }
+
+        public bool Busca_en_vistados(int[,] Tablero, int[,,] visitados, int indvisit)
+        {
+
+            int contador = 0;
+            bool rep = false;
+            for (int k = 0; k <= indvisit; k++)
+            {
+                contador = 0;
+
+                for (int j = 0; j < 3; j++)
+                {
+                    for (int l = 0; l < 3; l++)
+                    {
+
+
+                        if (Tablero[j, l] == visitados[k, j, l])
+                        {
+
+                            contador++;
+                        }
+
+
+
+                    }
+                    if (contador == 9)
+                    {
+                        rep = true;
+                        break;
+                    }
+                }
+
+
+
+
+            }
+
+            return rep;
+        }
 
     }
+
+
 }
+
