@@ -30,7 +30,7 @@ namespace WpfApplication3
 
             int[,] tablero = new int[3, 3];
             int[,] candidato = new int[3, 3];
-            int[,,] visitados = new int[60, 3, 3];
+            int[,,] visitados = new int[5, 3, 3];
             int indvis = 0;
             int H = 0,haux=0;//marca errores
             int index = -1;
@@ -38,16 +38,18 @@ namespace WpfApplication3
             bool rep = false;
 
             //inicializar valores de tablero inicial 
-            tablero[0, 0] = int.Parse(I00.Text);
-            tablero[0, 1] = int.Parse(I01.Text);
-            tablero[0, 2] = int.Parse(I02.Text);
-            tablero[1, 0] = int.Parse(I10.Text);
-            tablero[1, 1] = int.Parse(I11.Text);
-            tablero[1, 2] = int.Parse(I12.Text);
-            tablero[2, 0] = int.Parse(I20.Text);
-            tablero[2, 1] = int.Parse(I21.Text);
-            tablero[2, 2] = int.Parse(I22.Text);
+            visitados[0, 0, 0]= tablero[0, 0] = int.Parse(I00.Text);
+            visitados[0, 0, 1] = tablero[0, 1] = int.Parse(I01.Text);
+            visitados[0, 0, 2] = tablero[0, 2] = int.Parse(I02.Text);
+            visitados[0, 1, 0] = tablero[1, 0] = int.Parse(I10.Text);
+            visitados[0, 1, 1] = tablero[1, 1] = int.Parse(I11.Text);
+            visitados[0, 1, 2] = tablero[1, 2] = int.Parse(I12.Text);
+            visitados[0, 2, 0] = tablero[2, 0] = int.Parse(I20.Text);
+            visitados[0, 2, 1] = tablero[2, 1] = int.Parse(I21.Text);
+            visitados[0, 2, 2] = tablero[2, 2] = int.Parse(I22.Text);
+            indvis++;
             //inicializar valores de tablero completo
+
             int contador = 1;
             for (int k = 0; k < 3; k++)
             {
@@ -85,21 +87,24 @@ namespace WpfApplication3
 
             bool mverror = false;
 
-            while (H < 9)
-                for (int t = 0; t < 2; t++)
+                //while (H < 9)
+                for (int t = 0; t < 742; t++)
                 {
-                    MessageBox.Show("nuevo");
-                    H = 0;
+                
+                H = 0;
                     for (int k = 0; k < 2; k++)
                     {//buscar en x
                         haux = 0;
 
                         try
                         {
-                            mover_x(tablero, index);//mueve en eje x
-                            rep = Busca_en_vistados(tablero,visitados,indvis);//busca que no este repetido
-                            MessageBox.Show(rep.ToString());
-                            if (rep == false)
+                       
+                        mover_x(tablero, index);//mueve en eje 
+                       
+
+                        rep = Busca_en_vistados(tablero, visitados, indvis);//busca que no este repetido
+
+                        if (rep == false)
                             {
                                 Copia_vist(visitados,tablero, indvis);//guarda a visitados
                                 indvis++;
@@ -114,35 +119,40 @@ namespace WpfApplication3
 
                            
 
-                            index = index * -1;
+                            
                         }
                         catch (Exception ex)
                         {
                             mverror = true;
                         }
+                        index = index * -1;
 
 
 
 
-
-                        if (mverror == false)
+                    if (mverror == false)
                             mover_x(tablero, index);
 
                         mverror = false;
 
                     }
+
+
                     for (int k = 0; k < 2; k++)
                     {//buscar en y
-                        haux = 0;
+                    haux = 0;
 
-                        try
+                    try
                         {
-                            mover_y(tablero, index);
-                            rep = Busca_en_vistados(tablero, visitados, indvis);
-                            MessageBox.Show(rep.ToString());
-                            if (rep == false)
+                        
+                        mover_y(tablero, index);//mueve en eje y
+                        rep = Busca_en_vistados(tablero, visitados, indvis);
+
+                      
+                        if (rep == false)
                             {
                                 Copia_vist(visitados, tablero, indvis);//guarda a visitados
+                                indvis++;
                                 haux = Compara_competo(tablero);
 
                                 if (haux > H)
@@ -155,7 +165,7 @@ namespace WpfApplication3
 
                             
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             mverror = true;
                         }
@@ -176,61 +186,52 @@ namespace WpfApplication3
 
 
 
+                Copia_matriz(tablero, candidato);
+                cad = "";
+                for (int m = 0; m < 3; m++)
+                {
 
-
-                    Copia_matriz(tablero, candidato);
-
-
-
-                    cad = "";
-                    for (int m = 0; m < 3; m++)
+                    for (int j = 0; j < 3; j++)
                     {
-
-                        for (int j = 0; j < 3; j++)
-                        {
-                            cad += tablero[m, j].ToString();
-                            cad += ",";
-
-                        }
-                        cad += Environment.NewLine;
+                        cad += tablero[m, j].ToString();
+                        cad += ",";
 
                     }
-
-
-                    prueba.Text = cad;
-
-
+                    cad += Environment.NewLine;
 
                 }
-
-
-
-
-
-            cad = "";
-            for (int m = 0; m < 3; m++)
-            {
-
-                for (int j = 0; j < 3; j++)
-                {
-                    cad += tablero[m, j].ToString();
-                    cad += ",";
-
-                }
+                cad += "==";
                 cad += Environment.NewLine;
+                cad += Environment.NewLine;
+                prueba.Text = cad;
+               
+
+
 
             }
 
+            MessageBox.Show(indvis.ToString());
 
-            prueba.Text = cad;
+            //MessageBox.Show(indvis.ToString());
+            //for (int k = 0; k < indvis; k++)
+            //{
 
+            //    for (int m = 0; m < 3; m++)
+            //    {
 
+            //        for (int j = 0; j < 3; j++)
+            //        {
+            //            cad += visitados[k, m, j].ToString();
+            //            cad += ",";
 
+            //        }
+            //        cad += Environment.NewLine;
 
-
-
-
-
+            //    }
+            //    cad += Environment.NewLine;
+            //    cad += Environment.NewLine;
+            //    prueba.Text = cad;
+            //}
 
 
 
@@ -334,23 +335,17 @@ namespace WpfApplication3
         public void Copia_vist(int[,,] visitados, int[,] tablero,int index) 
         {
 
-            for (int l = 0; l < index; l++)
+            for (int k = 0; k < 3; k++)
             {
-
-                for (int k = 0; k < 3; k++)
+                for (int j = 0; j < 3; j++)
                 {
-                    for (int j = 0; j < 3; j++)
-                    {
 
-                        visitados[l,k, j] = tablero[k, j];
+                    visitados[index, k, j] = tablero[k, j];
 
 
 
-                    }
                 }
-
             }
-            
         }
 
         public bool Busca_en_vistados(int[,] Tablero, int[,,] visitados, int indvisit)
@@ -373,17 +368,14 @@ namespace WpfApplication3
 
                             contador++;
                         }
-
-
-
-                    }
-                    if (contador == 9)
-                    {
-                        rep = true;
-                        break;
                     }
                 }
-
+                
+                if (contador >= 8)
+                {
+                    rep = true;
+                    break;
+                }
 
 
 
@@ -397,3 +389,8 @@ namespace WpfApplication3
 
 }
 
+
+
+
+
+//////////////////////////////////
