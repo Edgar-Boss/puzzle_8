@@ -28,8 +28,9 @@ namespace WpfApplication3
         private void button_Click(object sender, RoutedEventArgs e)
         {
 
-            int[,] tablero = new int[3, 3];
-            int[,] candidato = new int[3, 3];
+            int[,,] tablero = new int[10,3, 3];
+            int[,,] candidato = new int[10,3, 3];
+            int indtab=0,indcad=0;
             int[,,] visitados = new int[500, 3, 3];
             int indvis = 0;
             int H = 0,haux=0;//marca errores
@@ -38,15 +39,15 @@ namespace WpfApplication3
             bool rep = false;
 
             //inicializar valores de tablero inicial 
-            visitados[0, 0, 0]= tablero[0, 0] = int.Parse(I00.Text);
-            visitados[0, 0, 1] = tablero[0, 1] = int.Parse(I01.Text);
-            visitados[0, 0, 2] = tablero[0, 2] = int.Parse(I02.Text);
-            visitados[0, 1, 0] = tablero[1, 0] = int.Parse(I10.Text);
-            visitados[0, 1, 1] = tablero[1, 1] = int.Parse(I11.Text);
-            visitados[0, 1, 2] = tablero[1, 2] = int.Parse(I12.Text);
-            visitados[0, 2, 0] = tablero[2, 0] = int.Parse(I20.Text);
-            visitados[0, 2, 1] = tablero[2, 1] = int.Parse(I21.Text);
-            visitados[0, 2, 2] = tablero[2, 2] = int.Parse(I22.Text);
+            visitados[0, 0, 0]= tablero[indtab,0, 0] = int.Parse(I00.Text);
+            visitados[0, 0, 1] = tablero[indtab,0, 1] = int.Parse(I01.Text);
+            visitados[0, 0, 2] = tablero[indtab, 0, 2] = int.Parse(I02.Text);
+            visitados[0, 1, 0] = tablero[indtab, 1, 0] = int.Parse(I10.Text);
+            visitados[0, 1, 1] = tablero[indtab, 1, 1] = int.Parse(I11.Text);
+            visitados[0, 1, 2] = tablero[indtab, 1, 2] = int.Parse(I12.Text);
+            visitados[0, 2, 0] = tablero[indtab, 2, 0] = int.Parse(I20.Text);
+            visitados[0, 2, 1] = tablero[indtab, 2, 1] = int.Parse(I21.Text);
+            visitados[0, 2, 2] = tablero[indtab, 2, 2] = int.Parse(I22.Text);
             indvis++;
             //inicializar valores de tablero completo
 
@@ -63,25 +64,6 @@ namespace WpfApplication3
 
             completo[2, 2] = 0;
             
-           
-
-            
-
-            
-
-            
-
-           
-
-
-
-
-
-
-
-
-
-
 
             index = -1;
 
@@ -105,7 +87,7 @@ namespace WpfApplication3
 
                             for (int j = 0; j < 3; j++)
                             {
-                                cad += tablero[m, j].ToString();
+                                cad += tablero[indtab, m, j].ToString();
                                 cad += ",";
 
                             }
@@ -117,14 +99,14 @@ namespace WpfApplication3
 
                         
 
-                        mover_x(tablero, index);//mueve en eje 
+                        mover_x(tablero, index,indtab);//mueve en eje 
                         cad += "";
                         for (int m = 0; m < 3; m++)
                         {
 
                             for (int j = 0; j < 3; j++)
                             {
-                                cad += tablero[m, j].ToString();
+                                cad += tablero[indtab,m, j].ToString();
                                 cad += ",";
 
                             }
@@ -138,16 +120,16 @@ namespace WpfApplication3
                         
                        
 
-                        rep = Busca_en_vistados(tablero, visitados, indvis);//busca que no este repetido
+                        rep = Busca_en_vistados(tablero, visitados, indvis,indtab);//busca que no este repetido
                        
                         if (rep == false)
                             {
-                                Copia_vist(visitados,tablero, indvis);//guarda a visitados
+                                Copia_vist(visitados,tablero, indvis,indtab);//guarda a visitados
                                 indvis++;
-                                haux = Compara_competo(tablero);//busca cuantos aciertos tiene el nuevo movimiento
+                                haux = Compara_competo(tablero,indtab);//busca cuantos aciertos tiene el nuevo movimiento
                                 if (haux >= H)//si es mayor al aterior entra
                                 {
-                                    Copia_matriz(candidato, tablero);//copia el nuevo movimiento a candidato 
+                                    Copia_matriz(candidato, tablero,indtab,indcad);//copia el nuevo movimiento a candidato 
                                     H = haux;// guarda en H para seguir comparando
                                 }
 
@@ -170,7 +152,7 @@ namespace WpfApplication3
                     if (mverror == false)
                     {
                         
-                        mover_x(tablero, index);
+                        mover_x(tablero, index,indtab);
                        
                     }
                            
@@ -193,7 +175,7 @@ namespace WpfApplication3
 
                             for (int j = 0; j < 3; j++)
                             {
-                                cad += tablero[m, j].ToString();
+                                cad += tablero[indtab,m, j].ToString();
                                 cad += ",";
 
                             }
@@ -205,7 +187,7 @@ namespace WpfApplication3
                        
                         prueba.Text = cad;
 
-                        mover_y(tablero, index);//mueve en eje y
+                        mover_y(tablero, index,indtab);//mueve en eje y
 
                         cad += "";
                         for (int m = 0; m < 3; m++)
@@ -213,7 +195,7 @@ namespace WpfApplication3
 
                             for (int j = 0; j < 3; j++)
                             {
-                                cad += tablero[m, j].ToString();
+                                cad += tablero[indtab,m, j].ToString();
                                 cad += ",";
 
                             }
@@ -226,18 +208,18 @@ namespace WpfApplication3
                         prueba.Text = cad;
 
                         //MessageBox.Show("mover");
-                        rep = Busca_en_vistados(tablero, visitados, indvis);
+                        rep = Busca_en_vistados(tablero, visitados, indvis,indtab);
 
                       
                         if (rep == false)
                             {
-                                Copia_vist(visitados, tablero, indvis);//guarda a visitados
+                                Copia_vist(visitados, tablero, indvis,indtab);//guarda a visitados
                                 indvis++;
-                                haux = Compara_competo(tablero);
+                                haux = Compara_competo(tablero,indtab);
 
                                 if (haux > H)
                                 {
-                                    Copia_matriz(candidato, tablero);
+                                    Copia_matriz(candidato, tablero,indtab,indcad);
                                     H = haux;
                                 }
                             }
@@ -255,7 +237,7 @@ namespace WpfApplication3
                         index = index * -1;
 
                         if (mverror == false)
-                            mover_y(tablero, index);
+                            mover_y(tablero, index,indtab);
 
                         mverror = false;
 
@@ -266,7 +248,7 @@ namespace WpfApplication3
 
 
 
-                Copia_matriz(tablero, candidato);
+                Copia_matriz(tablero, candidato,indtab,indcad);
 
                 cad = "";
                 for (int m = 0; m < 3; m++)
@@ -274,7 +256,7 @@ namespace WpfApplication3
 
                     for (int j = 0; j < 3; j++)
                     {
-                        cad += tablero[m, j].ToString();
+                        cad += tablero[indtab, m, j].ToString();
                         cad += ",";
 
                     }
@@ -293,28 +275,7 @@ namespace WpfApplication3
 
            
 
-            //MessageBox.Show(indvis.ToString());
-            //for (int k = 0; k < indvis; k++)
-            //{
-
-            //    for (int m = 0; m < 3; m++)
-            //    {
-
-            //        for (int j = 0; j < 3; j++)
-            //        {
-            //            cad += visitados[k, m, j].ToString();
-            //            cad += ",";
-
-            //        }
-            //        cad += Environment.NewLine;
-
-            //    }
-            //    cad += Environment.NewLine;
-            //    cad += Environment.NewLine;
-            //    prueba.Text = cad;
-            //}
-
-
+         
 
 
 
@@ -327,34 +288,32 @@ namespace WpfApplication3
 
 
 
-       
-
-        public void mover_x(int[,] tablero,int index)
+        public void mover_x(int[,,] tablero,int index,int indtab)
         {
 
             int[,] pos0 = new int[1, 2];
 
-            busca_pos0(tablero, pos0);
+            busca_pos0(tablero, pos0,indtab);
 
-            tablero[pos0[0, 0], pos0[0, 1]] = tablero[pos0[0, 0]+index, pos0[0, 1]];
-            tablero[pos0[0, 0]+index, pos0[0, 1]] = 0;
+            tablero[indtab, pos0[0, 0], pos0[0, 1]] = tablero[indtab, pos0[0, 0]+index, pos0[0, 1]];
+            tablero[indtab, pos0[0, 0]+index, pos0[0, 1]] = 0;
 
 
 
         }
 
 
-        public void mover_y(int[,] tablero, int index)
+        public void mover_y(int[,,] tablero, int index,int indtab)
         {
 
             int[,] pos0 = new int[1, 2];
-            busca_pos0(tablero, pos0);
+            busca_pos0(tablero, pos0,indtab);
 
-            tablero[pos0[0, 0], pos0[0, 1]] = tablero[pos0[0, 0] , pos0[0, 1]+index];
-            tablero[pos0[0, 0] , pos0[0, 1]+index] = 0;
+            tablero[indtab, pos0[0, 0], pos0[0, 1]] = tablero[indtab, pos0[0, 0] , pos0[0, 1]+index];
+            tablero[indtab, pos0[0, 0] , pos0[0, 1]+index] = 0;
         }
 
-        public void busca_pos0(int[,] tablero,int[,] pos0)
+        public void busca_pos0(int[,,] tablero,int[,] pos0,int indtab)
         {
 
             for (int k = 0; k < 3; k++)//buscar 0 (espacio)
@@ -363,7 +322,7 @@ namespace WpfApplication3
                 for (int j = 0; j < 3; j++)
                 {
 
-                    if (tablero[k, j] == 0)
+                    if (tablero[indtab, k, j] == 0)
                     {
                         pos0[0, 0] = k;
                         pos0[0, 1] = j;
@@ -376,7 +335,7 @@ namespace WpfApplication3
 
         }
 
-        public int Compara_competo(int[,] tablero)
+        public int Compara_competo(int[,,] tablero, int indtab)
         {
             int haux=0;
 
@@ -385,7 +344,7 @@ namespace WpfApplication3
                 for (int j = 0; j < 3; j++)
                 {
 
-                    if (tablero[k, j] == completo[k, j])
+                    if (tablero[indtab,k, j] == completo[k, j])
                         haux++;
 
 
@@ -396,7 +355,7 @@ namespace WpfApplication3
             return haux;
         }
 
-        public void Copia_matriz(int [,] candidato,int[,] tablero)
+        public void Copia_matriz(int [,,] candidato,int[,,] tablero,int indtab,int indcand)
         {
 
             for (int k = 0; k < 3; k++)
@@ -404,16 +363,14 @@ namespace WpfApplication3
                 for (int j = 0; j < 3; j++)
                 {
 
-                    candidato[k, j] = tablero[k, j];
-
-
+                    candidato[indcand,k, j] = tablero[indtab,k, j];
 
                 }
             }
         }
 
 
-        public void Copia_vist(int[,,] visitados, int[,] tablero,int index) 
+        public void Copia_vist(int[,,] visitados, int[,,] tablero,int index,int indtab) 
         {
 
             for (int k = 0; k < 3; k++)
@@ -421,7 +378,7 @@ namespace WpfApplication3
                 for (int j = 0; j < 3; j++)
                 {
 
-                    visitados[index, k, j] = tablero[k, j];
+                    visitados[index, k, j] = tablero[indtab,k, j];
 
 
 
@@ -429,7 +386,7 @@ namespace WpfApplication3
             }
         }
 
-        public bool Busca_en_vistados(int[,] Tablero, int[,,] visitados, int indvisit)
+        public bool Busca_en_vistados(int[,,] Tablero, int[,,] visitados, int indvisit,int indtab)
         {
 
             int contador = 0;
@@ -444,7 +401,7 @@ namespace WpfApplication3
                     {
 
 
-                        if (Tablero[j, l] == visitados[k, j, l])
+                        if (Tablero[indtab,j, l] == visitados[k, j, l])
                         {
 
                             contador++;
@@ -474,4 +431,4 @@ namespace WpfApplication3
 
 
 
-//////////////////////////////////
+
