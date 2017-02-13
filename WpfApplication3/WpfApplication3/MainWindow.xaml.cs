@@ -69,81 +69,80 @@ namespace WpfApplication3
 
             bool mverror = false;
 
-                //while (H < 9)
-                for (int t = 0; t < 742; t++)
+
+
+            while (H < 9)
+            //for (int t = 0; t < 742; t++)
+            {
+
+
+
+
+                for (int r = 0; r <= indtab; r++)
                 {
-                
+
+                    MessageBox.Show(r.ToString());
+                    
+
                 H = 0;
-                    for (int k = 0; k < 2; k++)
-                    {//buscar en x
-                        haux = 0;
-                        
-                        try
-                        {
+                for (int k = 0; k < 2; k++)
+                {//buscar en x
+                    haux = 0;
 
-                        cad = "";
-                        for (int m = 0; m < 3; m++)
-                        {
+                    try
+                    {
 
-                            for (int j = 0; j < 3; j++)
-                            {
-                                cad += tablero[indtab, m, j].ToString();
-                                cad += ",";
-
-                            }
-                            cad += Environment.NewLine;
-
-                        }
-                        cad += "==";
-                        cad += Environment.NewLine;
-
-                        
-
-                        mover_x(tablero, index,indtab);//mueve en eje 
-                        cad += "";
-                        for (int m = 0; m < 3; m++)
-                        {
-
-                            for (int j = 0; j < 3; j++)
-                            {
-                                cad += tablero[indtab,m, j].ToString();
-                                cad += ",";
-
-                            }
-                            cad += Environment.NewLine;
-
-                        }
-                        cad += "==";
-                        cad += Environment.NewLine;
-                        cad += Environment.NewLine;
-                        prueba.Text = cad;
-                        
                        
 
-                        rep = Busca_en_vistados(tablero, visitados, indvis,indtab);//busca que no este repetido
+
+                        mover_x(tablero, index, indtab);//mueve en eje 
                        
+
+
+                        rep = Busca_en_vistados(tablero, visitados, indvis, indtab);//busca que no este repetido
+
                         if (rep == false)
-                            {
-                                Copia_vist(visitados,tablero, indvis,indtab);//guarda a visitados
-                                indvis++;
-                                haux = Compara_competo(tablero,indtab);//busca cuantos aciertos tiene el nuevo movimiento
-                                if (haux >= H)//si es mayor al aterior entra
+                        {
+
+                                try
                                 {
-                                    Copia_matriz(candidato, tablero,indtab,indcad);//copia el nuevo movimiento a candidato 
-                                    H = haux;// guarda en H para seguir comparando
+                                    Copia_vist(visitados, tablero, indvis, indtab);//guarda a visitados
+                                    indvis++;
+                                    haux = Compara_competo(tablero, indtab);//busca cuantos aciertos tiene el nuevo movimiento
+
+
+                                    if (haux > H)//si es mayor al aterior entra
+                                    {
+                                        indcad = 0;
+                                        Copia_matriz(candidato, tablero, indtab, indcad);//copia el nuevo movimiento a candidato 
+                                        H = haux;// guarda en H para seguir comparando
+
+                                    }
+                                    else if (haux == H)
+                                    {
+                                        indcad++;
+                                        Copia_matriz(candidato, tablero, indtab, indcad);
+
+                                    }
                                 }
-
-                            }
-
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Excepcion x");
+                                }
                            
 
-                            
+
                         }
-                        catch (Exception ex)
-                        {
-                            mverror = true;
-                        }
-                    
+
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        mverror = true;
+                    }
+
                     index = index * -1;
 
 
@@ -151,105 +150,85 @@ namespace WpfApplication3
 
                     if (mverror == false)
                     {
-                        
-                        mover_x(tablero, index,indtab);
-                       
-                    }
-                           
 
-                        mverror = false;
+                        mover_x(tablero, index, indtab);
 
                     }
 
 
-                    for (int k = 0; k < 2; k++)
-                    {//buscar en y
+                    mverror = false;
+
+                }
+
+
+                for (int k = 0; k < 2; k++)
+                {//buscar en y
                     haux = 0;
 
                     try
-                        {
+                    {
 
-                        cad = "";
-                        for (int m = 0; m < 3; m++)
-                        {
 
-                            for (int j = 0; j < 3; j++)
-                            {
-                                cad += tablero[indtab,m, j].ToString();
-                                cad += ",";
+                        mover_y(tablero, index, indtab);//mueve en eje y
 
-                            }
-                            cad += Environment.NewLine;
+                        rep = Busca_en_vistados(tablero, visitados, indvis, indtab);
 
-                        }
-                        cad += "==";
-                        cad += Environment.NewLine;
-                       
-                        prueba.Text = cad;
 
-                        mover_y(tablero, index,indtab);//mueve en eje y
-
-                        cad += "";
-                        for (int m = 0; m < 3; m++)
-                        {
-
-                            for (int j = 0; j < 3; j++)
-                            {
-                                cad += tablero[indtab,m, j].ToString();
-                                cad += ",";
-
-                            }
-                            cad += Environment.NewLine;
-
-                        }
-                        cad += "==";
-                        cad += Environment.NewLine;
-                        cad += Environment.NewLine;
-                        prueba.Text = cad;
-
-                        //MessageBox.Show("mover");
-                        rep = Busca_en_vistados(tablero, visitados, indvis,indtab);
-
-                      
                         if (rep == false)
-                            {
-                                Copia_vist(visitados, tablero, indvis,indtab);//guarda a visitados
-                                indvis++;
-                                haux = Compara_competo(tablero,indtab);
-
-                                if (haux > H)
-                                {
-                                    Copia_matriz(candidato, tablero,indtab,indcad);
-                                    H = haux;
-                                }
-                            }
-                            
-
-                            
-                        }
-                        catch (Exception ex)
                         {
-                            mverror = true;
+                                try
+                                {
+                                    Copia_vist(visitados, tablero, indvis, indtab);//guarda a visitados
+                                    indvis++;
+                                    haux = Compara_competo(tablero, indtab);
+
+                                    if (haux > H)
+                                    {
+                                        indcad = 0;
+                                        Copia_matriz(candidato, tablero, indtab, indcad);
+                                        H = haux;
+                                    }
+                                    else if (haux == H)
+                                    {
+                                        indcad++;
+                                        Copia_matriz(candidato, tablero, indtab, indcad);
+
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("excepcion");
+                                }
+                            
                         }
-
-
-
-                        index = index * -1;
-
-                        if (mverror == false)
-                            mover_y(tablero, index,indtab);
-
-                        mverror = false;
 
 
 
                     }
+                    catch (Exception ex)
+                    {
+                        mverror = true;
+                    }
 
 
 
+                    index = index * -1;
 
-                Copia_matriz(tablero, candidato,indtab,indcad);
+                    if (mverror == false)
+                        mover_y(tablero, index, indtab);
 
+                    mverror = false;
+
+
+
+                }
+
+
+            }
+
+                indtab = indcad;
+                cand_tab(candidato, indcad, tablero, indtab);
+               
                 cad = "";
                 for (int m = 0; m < 3; m++)
                 {
@@ -260,18 +239,30 @@ namespace WpfApplication3
                         cad += ",";
 
                     }
+
                     cad += Environment.NewLine;
 
+
                 }
+
                 cad += "==";
                 cad += Environment.NewLine;
                 cad += Environment.NewLine;
                 prueba.Text = cad;
 
-                MessageBox.Show("fin");
+
+
+
+
 
 
             }
+
+
+
+            
+
+             
 
            
 
@@ -287,7 +278,21 @@ namespace WpfApplication3
         }
 
 
+        public void cand_tab(int[,,] cand , int indcand,int[,,] tablero,int indtab )
+        {
+            for (int j=0;j<=indcand;j++)
+            {
+                for (int k=0;k<3;k++)
+                {
+                    for (int l=0;l<3;l++)
+                    {
+                        tablero[j, k, l] = cand[j, k, l];
+                    }
 
+                }
+            }
+
+        }
         public void mover_x(int[,,] tablero,int index,int indtab)
         {
 
@@ -357,6 +362,8 @@ namespace WpfApplication3
 
         public void Copia_matriz(int [,,] candidato,int[,,] tablero,int indtab,int indcand)
         {
+
+            
 
             for (int k = 0; k < 3; k++)
             {
