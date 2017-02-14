@@ -37,6 +37,8 @@ namespace WpfApplication3
             int index = -1;
             string cad = "";
             bool rep = false;
+            TextBox[] V = new TextBox[2000];//textbox donde se mostraran las vertices
+
 
             //inicializar valores de tablero inicial 
             visitados[0, 0, 0]= tablero[indtab,0, 0] = int.Parse(I00.Text);
@@ -70,7 +72,10 @@ namespace WpfApplication3
             bool mverror = false;
 
 
-
+            int lv = -100;
+            int lh = -250;
+            int contv = 0;
+            
             while (H < 9)
             //for (int t = 0; t < 742; t++)
             {
@@ -81,7 +86,7 @@ namespace WpfApplication3
                 for (int r = 0; r <= indtab; r++)
                 {
 
-                    MessageBox.Show(r.ToString());
+                  //  MessageBox.Show(r.ToString());
                     
 
                 H = 0;
@@ -225,6 +230,43 @@ namespace WpfApplication3
 
 
             }
+
+
+                
+
+
+
+
+
+                
+
+                for (int m= 0; m < 3; m++)
+                {
+                    lv = -100;   
+                    for (int j = 0; j < 3; j++)
+                    {
+
+
+                        
+                        V[contv] = new TextBox();
+
+                        V[contv].Text = tablero[indtab, m, j].ToString();
+                        V[contv].Height = 19;
+                        V[contv].Width = 26;
+                        V[contv].Margin = new Thickness(lv, 54, 0, 0);
+                        stak.Children.Add(V[contv]);
+                        lv += 50;
+                        contv++;
+                        
+                    }
+                    
+                    lh += 38;
+                }
+                MessageBox.Show(lh.ToString());
+                //lh += 70;
+
+
+
 
                 indtab = indcad;
                 cand_tab(candidato, indcad, tablero, indtab);
